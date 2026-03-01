@@ -1,3 +1,10 @@
+node_modules/
 .env
+.env.local
 __pycache__
 test.ogg
+*.db
+backend/prisma/dev.db
+admin/.next/
+backend/dist/
+.DS_Store
