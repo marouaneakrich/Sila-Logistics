@@ -14,10 +14,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Rect, Circle, Polygon, Text as SvgText, Path } from 'react-native-svg';
+import { useAuthStore } from '../store/useAuthStore';
 
 const { width } = Dimensions.get('window');
 
-// ─── Theme ───────────────────────────────────────────────────────────────────
 const COLORS = {
     bg: '#F5F3EE',
     white: '#FFFFFF',
@@ -40,7 +40,6 @@ const FONTS = {
     phone: { fontFamily: 'System', fontSize: 15, fontWeight: '600' as const },
 };
 
-// ─── Truck SVG Illustration ───────────────────────────────────────────────────
 function TruckScene() {
     const driveAnim = useRef(new Animated.Value(0)).current;
 
@@ -55,14 +54,11 @@ function TruckScene() {
 
     return (
         <View style={styles.truckScene}>
-            {/* Sky gradient using layered views */}
             <View style={[StyleSheet.absoluteFill, { backgroundColor: COLORS.sunset1 }]} />
             <View style={[StyleSheet.absoluteFill, { backgroundColor: COLORS.sunset2, opacity: 0.6 }]} />
 
-            {/* Sun */}
             <View style={styles.sun} />
 
-            {/* Animated Truck */}
             <Animated.View style={[styles.truckWrapper, { transform: [{ translateY: driveAnim }] }]}>
                 <Svg width={260} height={80} viewBox="0 0 260 80">
                     {/* Trailer body */}
@@ -97,7 +93,6 @@ function TruckScene() {
     );
 }
 
-// ─── Truck Icon for badge ────────────────────────────────────────────────────
 function TruckIcon() {
     return (
         <Svg width={28} height={28} viewBox="0 0 24 24" fill="white">
@@ -106,11 +101,10 @@ function TruckIcon() {
     );
 }
 
-// ─── Main Screen ─────────────────────────────────────────────────────────────
 export default function LoginScreen({ navigation }: any) {
     const [phone, setPhone] = React.useState('');
+    const login = useAuthStore((state) => state.login);
 
-    // Staggered entrance animations
     const anim0 = useRef(new Animated.Value(0)).current;
     const anim1 = useRef(new Animated.Value(0)).current;
     const anim2 = useRef(new Animated.Value(0)).current;
@@ -130,7 +124,8 @@ export default function LoginScreen({ navigation }: any) {
 
     const handleLogin = () => {
         if (phone.length < 10) return;
-        navigation?.replace('Dashboard');
+        console.log('LoginScreen: Logging in with', phone);
+        login(phone);
     };
 
     const slide = (anim: Animated.Value, dir: 'up' | 'down' = 'up') => ({
@@ -159,7 +154,6 @@ export default function LoginScreen({ navigation }: any) {
                     keyboardShouldPersistTaps="handled"
                 >
 
-                    {/* ── Logo ── */}
                     <Animated.View style={[styles.logoSection, slide(anim0, 'down')]}>
                         <View style={styles.iconBadge}>
                             <TruckIcon />
@@ -167,7 +161,6 @@ export default function LoginScreen({ navigation }: any) {
                         <Text style={styles.brandName}>Sila-Logistics</Text>
                     </Animated.View>
 
-                    {/* ── Hero Illustration ── */}
                     <Animated.View style={[styles.heroContainer, slide(anim1)]}>
                         <TruckScene />
                     </Animated.View>
@@ -180,7 +173,6 @@ export default function LoginScreen({ navigation }: any) {
                         </Text>
                     </Animated.View>
 
-                    {/* ── Form Section ── */}
                     <Animated.View style={[styles.formSection, slide(anim3)]}>
                         <Text style={styles.inputLabel}>PHONE NUMBER</Text>
                         <View style={styles.inputRow}>
@@ -221,7 +213,6 @@ export default function LoginScreen({ navigation }: any) {
     );
 }
 
-// ─── Styles ──────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -309,7 +300,6 @@ const styles = StyleSheet.create({
         height: 3,
         backgroundColor: 'rgba(255,255,255,0.35)',
         marginHorizontal: 0,
-        // dashes via border trick not easy in RN, so keep solid stripe
     },
 
     // Welcome

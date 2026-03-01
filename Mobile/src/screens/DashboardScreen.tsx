@@ -1,24 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Bell, MapPin, Package, Star, Calendar, Clock, Home, ClipboardList, User } from 'lucide-react-native';
+import { Bell, MapPin, Package, Star, Calendar, Clock, Home, ClipboardList, User, Banknote } from 'lucide-react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { COLORS, SIZES, FONTS } from '../theme';
+import { mockDriver } from '../data/mockData';
 
 export default function DashboardScreen({ navigation }: any) {
+    const initials = mockDriver.name.split(' ').map(n => n[0]).join('');
+
     return (
         <SafeAreaView style={styles.container}>
-            {/* Header */}
             <View style={styles.header}>
                 <View style={styles.userInfo}>
-                    <View style={styles.avatarContainer}>
-                        {/* Avatar Placeholder */}
-                        <View style={styles.avatar} />
+                    <TouchableOpacity
+                        style={styles.avatarContainer}
+                        onPress={() => navigation.navigate('Profile')}
+                    >
+                        <View style={styles.avatar}>
+                            <Text style={styles.avatarText}>{initials}</Text>
+                        </View>
                         <View style={styles.onlineStatus} />
-                    </View>
+                    </TouchableOpacity>
                     <View>
-                        <Text style={styles.statusText}>ONLINE</Text>
-                        <Text style={styles.userName}>Ministère de la Transition Numérique et de la Réforme de l'Administration</Text>
+                        <Text style={styles.statusText}>EN LIGNE</Text>
+                        <Text style={styles.userName}>{mockDriver.name}</Text>
                     </View>
                 </View>
                 <TouchableOpacity style={styles.notificationBtn}>
@@ -28,27 +34,26 @@ export default function DashboardScreen({ navigation }: any) {
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                {/* Stats Row */}
                 <View style={styles.statsRow}>
                     <View style={styles.statCard}>
                         <Package color={COLORS.primary} size={24} />
-                        <Text style={styles.statLabel}>Total Pickups</Text>
+                        <Text style={styles.statLabel}>Livraisons</Text>
                         <Text style={styles.statValue}>12</Text>
                     </View>
                     <View style={styles.statCard}>
-                        <Text style={styles.statLabel}>Earnings</Text>
-                        <Text style={styles.statValueEarnings}>$142.50</Text>
+                        <Banknote color={COLORS.primary} size={24} />
+                        <Text style={styles.statLabel}>Gains</Text>
+                        <Text style={styles.statValueEarnings}>{mockDriver.earnings.toFixed(0)} DH</Text>
                     </View>
                     <View style={styles.statCard}>
                         <Star color={COLORS.primary} size={24} fill={COLORS.primary} />
-                        <Text style={styles.statLabel}>Rating</Text>
-                        <Text style={styles.statValue}>4.9</Text>
+                        <Text style={styles.statLabel}>Score</Text>
+                        <Text style={styles.statValue}>{mockDriver.rating}</Text>
                     </View>
                 </View>
 
                 <Text style={styles.sectionTitle}>Available Pickups</Text>
 
-                {/* Map Integration — tap to go fullscreen */}
                 <TouchableOpacity
                     activeOpacity={0.9}
                     onPress={() => navigation.navigate('Map')}
@@ -77,13 +82,11 @@ export default function DashboardScreen({ navigation }: any) {
                             </View>
                         </Marker>
                     </MapView>
-                    {/* Tap hint overlay */}
                     <View style={styles.mapOverlay}>
                         <Text style={styles.mapOverlayText}>Tap to expand map</Text>
                     </View>
                 </TouchableOpacity>
 
-                {/* Action Card */}
                 <View style={styles.actionCard}>
                     <View style={styles.actionHeader}>
                         <View style={styles.tagContainer}>
@@ -130,11 +133,9 @@ export default function DashboardScreen({ navigation }: any) {
                     </View>
                 </View>
 
-                {/* Make space for bottom nav */}
                 <View style={{ height: 80 }} />
             </ScrollView>
 
-            {/* Bottom Navigation */}
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Dashboard')}>
                     <Home color={COLORS.primary} size={24} />
@@ -178,7 +179,14 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
         borderRadius: 22,
-        backgroundColor: COLORS.border,
+        backgroundColor: COLORS.primary,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    avatarText: {
+        color: COLORS.white,
+        fontSize: 16,
+        fontWeight: '700',
     },
     onlineStatus: {
         width: 12,

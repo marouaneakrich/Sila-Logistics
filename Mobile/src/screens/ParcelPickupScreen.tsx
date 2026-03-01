@@ -19,7 +19,6 @@ export default function ParcelPickupScreen({ navigation }: any) {
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
-                {/* Parcel Image Area */}
                 <View style={styles.imageContainer}>
                     <View style={styles.imagePlaceholder} />
                     <View style={styles.verifiedBadge}>
@@ -28,7 +27,6 @@ export default function ParcelPickupScreen({ navigation }: any) {
                     </View>
                 </View>
 
-                {/* Sender Info */}
                 <View style={styles.senderHeader}>
                     <View>
                         <Text style={styles.senderName}>Fatima</Text>
@@ -39,7 +37,6 @@ export default function ParcelPickupScreen({ navigation }: any) {
                     </View>
                 </View>
 
-                {/* Details List */}
                 <View style={styles.detailsContainer}>
                     <View style={styles.detailRow}>
                         <View style={styles.detailIconContainer}>
@@ -70,7 +67,6 @@ export default function ParcelPickupScreen({ navigation }: any) {
                     </View>
                 </View>
 
-                {/* Location Card */}
                 <TouchableOpacity style={styles.locationCard} onPress={() => navigation.navigate('Scanner')}>
                     <View style={styles.locationInfo}>
                         <View style={styles.locationIcon}>
@@ -86,7 +82,6 @@ export default function ParcelPickupScreen({ navigation }: any) {
 
             </ScrollView>
 
-            {/* Action Button */}
             <View style={styles.footer}>
                 <TouchableOpacity style={styles.primaryButton} onPress={() => navigation.navigate('DeliverySuccess')}>
                     <CheckCircle2 color={COLORS.white} size={20} style={{ marginRight: 8 }} />
@@ -123,7 +118,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: '100%',
         height: 220,
-        backgroundColor: '#E8ECF1', // Light gray background for the box
+        backgroundColor: '#E8ECF1',
         borderRadius: SIZES.radiusL,
         position: 'relative',
         marginBottom: 24,

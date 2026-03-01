@@ -12,12 +12,10 @@ export default function ScannerScreen({ navigation }: any) {
     const [torch, setTorch] = useState(false);
 
     if (!permission) {
-        // Camera permissions are still loading.
         return <View />;
     }
 
     if (!permission.granted) {
-        // Camera permissions are not granted yet.
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.permissionContainer}>
@@ -35,7 +33,6 @@ export default function ScannerScreen({ navigation }: any) {
             setScanned(true);
             console.log(`Bar code with type ${type} and data ${data} has been scanned!`);
             navigation.navigate('ParcelPickup');
-            // Reset scanned state after a short delay if needed
             setTimeout(() => setScanned(false), 2000);
         }
     };
@@ -110,7 +107,6 @@ export default function ScannerScreen({ navigation }: any) {
                 </View>
             </View>
 
-            {/* Bottom Navigation */}
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Dashboard')}>
                     <Home color={COLORS.textSecondary} size={24} />
@@ -265,7 +261,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderColor: COLORS.border,
-        marginBottom: 80, // adjusted to leave room for bottom nav without pushing too high
+        marginBottom: 80,
     },
     statusIconContainer: {
         width: 40,

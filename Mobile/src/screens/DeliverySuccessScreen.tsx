@@ -12,7 +12,7 @@ export default function DeliverySuccessScreen({ navigation }: any) {
                     <ChevronLeft color={COLORS.text} size={24} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Delivery Success</Text>
-                <View style={styles.iconBtn} /> {/* Empty view for alignment */}
+                <View style={styles.iconBtn} />
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -25,12 +25,10 @@ export default function DeliverySuccessScreen({ navigation }: any) {
                     <Text style={styles.successSubtitle}>Order #SL-8842 has been handed over</Text>
                 </View>
 
-                {/* Image Placeholder */}
                 <View style={styles.imageContainer}>
                     <View style={styles.imagePlaceholder} />
                 </View>
 
-                {/* Earnings Card */}
                 <View style={styles.earningsCard}>
                     <View>
                         <Text style={styles.earningsLabel}>TRIP EARNINGS</Text>
@@ -39,7 +37,6 @@ export default function DeliverySuccessScreen({ navigation }: any) {
                     <Banknote color={COLORS.primary} size={32} />
                 </View>
 
-                {/* Summary Card */}
                 <View style={styles.summaryCard}>
                     <Text style={styles.summaryTitle}>Today's Summary</Text>
 
@@ -83,7 +80,6 @@ export default function DeliverySuccessScreen({ navigation }: any) {
 
             </ScrollView>
 
-            {/* Action Button */}
             <View style={styles.footer}>
                 <TouchableOpacity
                     style={styles.secondaryButton}
@@ -147,7 +143,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: '100%',
         height: 160,
-        backgroundColor: '#1C2938', // Dark background for the package picture placeholder
+        backgroundColor: '#1C2938',
         borderRadius: SIZES.radiusL,
         marginBottom: 24,
         overflow: 'hidden',

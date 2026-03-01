@@ -24,18 +24,17 @@ import { COLORS, SIZES, FONTS } from '../theme';
 import { mockDriver } from '../data/mockData';
 
 export default function ProfileScreen({ navigation }: any) {
-    const initials = mockDriver.name.charAt(0).toUpperCase();
+    const initials = mockDriver.name.split(' ').map(n => n[0]).join('');
 
     const menuItems = [
-        { id: 'settings', title: 'Account Settings', icon: <Settings size={20} color={COLORS.textSecondary} /> },
-        { id: 'vehicle', title: 'Vehicle Details', icon: <Truck size={20} color={COLORS.textSecondary} /> },
-        { id: 'history', title: 'Performance History', icon: <History size={20} color={COLORS.textSecondary} /> },
+        { id: 'settings', title: 'Paramètres du compte', icon: <Settings size={20} color={COLORS.textSecondary} /> },
+        { id: 'vehicle', title: 'Détails du véhicule', icon: <Truck size={20} color={COLORS.textSecondary} /> },
+        { id: 'history', title: 'Historique des performances', icon: <History size={20} color={COLORS.textSecondary} /> },
     ];
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                {/* Profile Header */}
                 <View style={styles.header}>
                     <View style={styles.avatarContainer}>
                         <Text style={styles.avatarText}>{initials}</Text>
@@ -45,26 +44,25 @@ export default function ProfileScreen({ navigation }: any) {
 
                     <View style={styles.statusBadge}>
                         <View style={[styles.statusDot, mockDriver.isOnline ? styles.onlineDot : styles.offlineDot]} />
-                        <Text style={styles.statusText}>{mockDriver.isOnline ? 'Active Now' : 'Offline'}</Text>
+                        <Text style={styles.statusText}>{mockDriver.isOnline ? 'EN LIGNE' : 'HORS LIGNE'}</Text>
                     </View>
                 </View>
 
-                {/* Stats Grid */}
                 <View style={styles.statsGrid}>
                     <View style={styles.statCard}>
                         <View style={[styles.statIcon, { backgroundColor: '#EBF5FF' }]}>
                             <Package size={20} color={COLORS.primary} />
                         </View>
                         <Text style={styles.statValue}>{mockDriver.totalPickups}</Text>
-                        <Text style={styles.statLabel}>Pickups</Text>
+                        <Text style={styles.statLabel}>Livraisons</Text>
                     </View>
 
                     <View style={styles.statCard}>
                         <View style={[styles.statIcon, { backgroundColor: '#EBFFF1' }]}>
                             <Banknote size={20} color={COLORS.success} />
                         </View>
-                        <Text style={styles.statValue}>{mockDriver.earnings.toFixed(2)} DH</Text>
-                        <Text style={styles.statLabel}>Earnings</Text>
+                        <Text style={styles.statValue}>{mockDriver.earnings.toFixed(0)} DH</Text>
+                        <Text style={styles.statLabel}>Gains</Text>
                     </View>
 
                     <View style={styles.statCard}>
@@ -72,11 +70,10 @@ export default function ProfileScreen({ navigation }: any) {
                             <Star size={20} color="#FFB800" />
                         </View>
                         <Text style={styles.statValue}>{mockDriver.rating}</Text>
-                        <Text style={styles.statLabel}>Rating</Text>
+                        <Text style={styles.statLabel}>Score</Text>
                     </View>
                 </View>
 
-                {/* Menu List */}
                 <View style={styles.menuContainer}>
                     {menuItems.map((item) => (
                         <TouchableOpacity key={item.id} style={styles.menuItem}>
@@ -98,7 +95,7 @@ export default function ProfileScreen({ navigation }: any) {
                             <View style={[styles.menuIconWrapper, { backgroundColor: '#FFF1F0' }]}>
                                 <LogOut size={20} color="#F5222D" />
                             </View>
-                            <Text style={[styles.menuItemTitle, { color: '#F5222D' }]}>Logout</Text>
+                            <Text style={[styles.menuItemTitle, { color: '#F5222D', fontWeight: 'bold' }]}>Déconnexion</Text>
                         </View>
                         <ChevronRight size={20} color={COLORS.border} />
                     </TouchableOpacity>
@@ -107,7 +104,6 @@ export default function ProfileScreen({ navigation }: any) {
                 <View style={{ height: 100 }} />
             </ScrollView>
 
-            {/* Bottom Navigation */}
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Dashboard')}>
                     <Home color={COLORS.textSecondary} size={24} />
