@@ -21,10 +21,21 @@ import {
     Banknote
 } from 'lucide-react-native';
 import { COLORS, SIZES, FONTS } from '../theme';
-import { mockDriver } from '../data/mockData';
+import { useAuthStore } from '../store/useAuthStore';
+import { mockDriver as fallbackDriver } from '../data/mockData';
 
 export default function ProfileScreen({ navigation }: any) {
-    const initials = mockDriver.name.split(' ').map(n => n[0]).join('');
+    const { driver: driverStore, logout } = useAuthStore((state) => ({
+        driver: state.driver,
+        logout: state.logout
+    }));
+    const driver = driverStore || fallbackDriver;
+    const initials = driver.fullName ? driver.fullName.split(' ').map((n: string) => n[0]).join('') : 'D';
+
+    const handleLogout = () => {
+        logout();
+        navigation.navigate('Login');
+    };
 
     const menuItems = [
         { id: 'settings', title: 'Paramètres du compte', icon: <Settings size={20} color={COLORS.textSecondary} /> },
@@ -39,12 +50,12 @@ export default function ProfileScreen({ navigation }: any) {
                     <View style={styles.avatarContainer}>
                         <Text style={styles.avatarText}>{initials}</Text>
                     </View>
-                    <Text style={styles.name}>{mockDriver.name}</Text>
-                    <Text style={styles.email}>{mockDriver.email}</Text>
+                    <Text style={styles.name}>{driver.fullName || driver.name}</Text>
+                    <Text style={styles.email}>{driver.phone || driver.email}</Text>
 
                     <View style={styles.statusBadge}>
-                        <View style={[styles.statusDot, mockDriver.isOnline ? styles.onlineDot : styles.offlineDot]} />
-                        <Text style={styles.statusText}>{mockDriver.isOnline ? 'EN LIGNE' : 'HORS LIGNE'}</Text>
+                        <View style={[styles.statusDot, (driver.isActive ?? true) ? styles.onlineDot : styles.offlineDot]} />
+                        <Text style={styles.statusText}>{(driver.isActive ?? true) ? 'EN LIGNE' : 'HORS LIGNE'}</Text>
                     </View>
                 </View>
 
@@ -53,7 +64,7 @@ export default function ProfileScreen({ navigation }: any) {
                         <View style={[styles.statIcon, { backgroundColor: '#EBF5FF' }]}>
                             <Package size={20} color={COLORS.primary} />
                         </View>
-                        <Text style={styles.statValue}>{mockDriver.totalPickups}</Text>
+                        <Text style={styles.statValue}>{driver.totalPickups || 0}</Text>
                         <Text style={styles.statLabel}>Livraisons</Text>
                     </View>
 
@@ -61,7 +72,7 @@ export default function ProfileScreen({ navigation }: any) {
                         <View style={[styles.statIcon, { backgroundColor: '#EBFFF1' }]}>
                             <Banknote size={20} color={COLORS.success} />
                         </View>
-                        <Text style={styles.statValue}>{mockDriver.earnings.toFixed(0)} DH</Text>
+                        <Text style={styles.statValue}>{(driver.earnings || 0).toFixed(0)} DH</Text>
                         <Text style={styles.statLabel}>Gains</Text>
                     </View>
 
@@ -69,7 +80,7 @@ export default function ProfileScreen({ navigation }: any) {
                         <View style={[styles.statIcon, { backgroundColor: '#FFF9EB' }]}>
                             <Star size={20} color="#FFB800" />
                         </View>
-                        <Text style={styles.statValue}>{mockDriver.rating}</Text>
+                        <Text style={styles.statValue}>{driver.rating || 5.0}</Text>
                         <Text style={styles.statLabel}>Score</Text>
                     </View>
                 </View>
@@ -89,7 +100,7 @@ export default function ProfileScreen({ navigation }: any) {
 
                     <TouchableOpacity
                         style={[styles.menuItem, { borderBottomWidth: 0 }]}
-                        onPress={() => navigation.navigate('Login')}
+                        onPress={handleLogout}
                     >
                         <View style={styles.menuItemLeft}>
                             <View style={[styles.menuIconWrapper, { backgroundColor: '#FFF1F0' }]}>

@@ -4,10 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bell, MapPin, Package, Star, Calendar, Clock, Home, ClipboardList, User, Banknote } from 'lucide-react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { COLORS, SIZES, FONTS } from '../theme';
-import { mockDriver } from '../data/mockData';
+import { useAuthStore } from '../store/useAuthStore';
+import { mockDriver as fallbackDriver } from '../data/mockData';
 
 export default function DashboardScreen({ navigation }: any) {
-    const initials = mockDriver.name.split(' ').map(n => n[0]).join('');
+    const driverStore = useAuthStore((state) => state.driver);
+    const driver = driverStore || fallbackDriver;
+    const initials = driver.fullName ? driver.fullName.split(' ').map((n: string) => n[0]).join('') : 'D';
 
     return (
         <SafeAreaView style={styles.container}>
@@ -24,7 +27,7 @@ export default function DashboardScreen({ navigation }: any) {
                     </TouchableOpacity>
                     <View>
                         <Text style={styles.statusText}>EN LIGNE</Text>
-                        <Text style={styles.userName}>{mockDriver.name}</Text>
+                        <Text style={styles.userName}>{driver.fullName || driver.name}</Text>
                     </View>
                 </View>
                 <TouchableOpacity style={styles.notificationBtn}>
@@ -43,12 +46,12 @@ export default function DashboardScreen({ navigation }: any) {
                     <View style={styles.statCard}>
                         <Banknote color={COLORS.primary} size={24} />
                         <Text style={styles.statLabel}>Gains</Text>
-                        <Text style={styles.statValueEarnings}>{mockDriver.earnings.toFixed(0)} DH</Text>
+                        <Text style={styles.statValueEarnings}>{(driver.earnings || 0).toFixed(0)} DH</Text>
                     </View>
                     <View style={styles.statCard}>
                         <Star color={COLORS.primary} size={24} fill={COLORS.primary} />
                         <Text style={styles.statLabel}>Score</Text>
-                        <Text style={styles.statValue}>{mockDriver.rating}</Text>
+                        <Text style={styles.statValue}>{driver.rating || 5.0}</Text>
                     </View>
                 </View>
 

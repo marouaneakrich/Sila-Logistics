@@ -11,6 +11,8 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
+    ActivityIndicator,
+    Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Rect, Circle, Polygon, Text as SvgText, Path } from 'react-native-svg';
@@ -103,6 +105,7 @@ function TruckIcon() {
 
 export default function LoginScreen({ navigation }: any) {
     const [phone, setPhone] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
     const login = useAuthStore((state) => state.login);
 
     const anim0 = useRef(new Animated.Value(0)).current;
@@ -122,10 +125,15 @@ export default function LoginScreen({ navigation }: any) {
         ]).start();
     }, []);
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (phone.length < 10) return;
-        console.log('LoginScreen: Logging in with', phone);
-        login(phone);
+        setLoading(true);
+        const result = await login(phone);
+        setLoading(false);
+
+        if (!result.success) {
+            Alert.alert('Erreur', result.message);
+        }
     };
 
     const slide = (anim: Animated.Value, dir: 'up' | 'down' = 'up') => ({
@@ -191,12 +199,16 @@ export default function LoginScreen({ navigation }: any) {
                         </View>
 
                         <TouchableOpacity
-                            style={[styles.btnOtp, phone.length < 10 && { opacity: 0.6 }]}
+                            style={[styles.btnOtp, (phone.length < 10 || loading) && { opacity: 0.6 }]}
                             activeOpacity={0.85}
                             onPress={handleLogin}
-                            disabled={phone.length < 10}
+                            disabled={phone.length < 10 || loading}
                         >
-                            <Text style={styles.btnOtpText}>Login & Continue  →</Text>
+                            {loading ? (
+                                <ActivityIndicator color={COLORS.white} />
+                            ) : (
+                                <Text style={styles.btnOtpText}>Login & Continue  →</Text>
+                            )}
                         </TouchableOpacity>
 
                         <View style={styles.supportRow}>
