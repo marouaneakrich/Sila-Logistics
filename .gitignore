@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.local
+*.db
+backend/prisma/dev.db
+admin/.next/
+backend/dist/
+.DS_Store
